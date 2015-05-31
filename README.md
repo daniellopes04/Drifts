@@ -1,6 +1,11 @@
 # Drifts
 
-Projeto de 2015/1 de Computação II - Java
+Informações Gerais
+-------
+
+Trabalho de desenvolvimento Java para a disciplina de Computação II do curso de Ciência da Computação da Universidade Federal do Rio de Janeiro (UFRJ).
+
+O jogo
 -------
 
 OE
