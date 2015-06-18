@@ -5,7 +5,7 @@ Trabalho de desenvolvimento Java para a disciplina de Computação II do curso d
 ##Descrição do jogo
 
 O jogo é conhecido como Drifts e uma versão que pode ser jogada na Internet pode ser
-encontrada em http://www.repeatwhiletrue.com/drifts/. O usuário comanda com
+encontrada em http://www.bigfishgames.com/online-games/4095/drifts/index.html. O usuário comanda com
 o mouse o movimento de uma bolha vermelha em uma área da tela. O objetivo do
 jogo é colar à bolha vermelha o maior número de bolhas verdes possível evitando as
 bolhas púrpuras. Tocar uma bolha azul transforma suas bolhas verdes em pontos e as faz
