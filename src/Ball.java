@@ -1,3 +1,4 @@
+import java.util.Random;
 
 public class Ball {
 
@@ -5,14 +6,20 @@ public class Ball {
 	private Velocity v;
 	private int radius = 20;
 	
+	public Ball() {
+		
+	}
+	
 	public Ball(int x, int y) {
 		center = new Point(x, y);
-		if(x % 2 == 0) {
+		/**if(x % 2 == 0) {
 			v = new Velocity(1, 1);
 		}
 		else {
 			v = new Velocity(-1, 1);
-		}
+		}**/
+		Random random = new Random();
+		v = new Velocity(random.nextInt(5)+1, random.nextInt(5)+1);
 	}
 
 	public Point getCenter() {
@@ -62,7 +69,7 @@ public class Ball {
 	public void setRadius(int radius) {
 		this.radius = radius;
 	}
-	
+
 	public void move(World world) {
 		if((this.getX() > world.getSize() - this.getRadius() * 2) || (this.getX() < 0)) {
 			this.setVx(-this.getVx());
