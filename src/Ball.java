@@ -12,14 +12,15 @@ public class Ball {
 	
 	public Ball(int x, int y) {
 		center = new Point(x, y);
-		/**if(x % 2 == 0) {
-			v = new Velocity(1, 1);
+		Random random = new Random();
+		boolean aux = random.nextBoolean();
+		
+		if(aux) {
+			v = new Velocity(random.nextInt(5)+1, random.nextInt(5)+1);
 		}
 		else {
-			v = new Velocity(-1, 1);
-		}**/
-		Random random = new Random();
-		v = new Velocity(random.nextInt(5)+1, random.nextInt(5)+1);
+			v = new Velocity(-random.nextInt(5)+1, random.nextInt(5)+1);
+		}
 	}
 
 	public Point getCenter() {
@@ -71,13 +72,13 @@ public class Ball {
 	}
 
 	public void move(World world) {
-		if((this.getX() > world.getSize() - this.getRadius() * 2) || (this.getX() < 0)) {
-			this.setVx(-this.getVx());
-		}
-		
-		if((this.getY() > world.getSize() - this.getRadius() * 2) || (this.getY() < 0)) {
-			this.setVy(-this.getVy());
-		}
+//		if((this.getX() > world.getSize() - this.getRadius() * 2) || (this.getX() < 0)) {
+//			this.setVx(-this.getVx());
+//		}
+//		
+//		if((this.getY() > world.getSize() - this.getRadius() * 2) || (this.getY() < 0)) {
+//			this.setVy(-this.getVy());
+//		}
 		
 		this.setX(this.getX() + this.getVx());
 		this.setY(this.getY() + this.getVy());
