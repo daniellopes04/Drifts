@@ -63,7 +63,7 @@ public class Game {
 		JFrame frame = new JFrame();
 		JPanel pointsPanel = new JPanel();
 		JLabel pointsIndicator = new JLabel(String.valueOf(points));
-		Font pointsFont = new Font("serif", Font.BOLD, 20);
+		Font pointsFont = new Font("serif", Font.BOLD, 30);
 		GamePanel drawPanel = new GamePanel();
 		pointsIndicator.setFont(pointsFont);
 		pointsPanel.add(pointsIndicator);
