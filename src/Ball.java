@@ -1,17 +1,18 @@
-import java.awt.Color;
 
 public class Ball {
 
 	private Point center;
 	private Velocity v;
-	private double radius;
-	private Color color;
+	private int radius = 20;
 	
-	public Ball(Point center, Velocity v, double radius, Color color) {
-		this.center = center;
-		this.v = v;
-		this.radius = radius;
-		this.color = color;
+	public Ball(int x, int y) {
+		center = new Point(x, y);
+		if(x % 2 == 0) {
+			v = new Velocity(1, 1);
+		}
+		else {
+			v = new Velocity(-1, 1);
+		}
 	}
 
 	public Point getCenter() {
@@ -21,72 +22,67 @@ public class Ball {
 	public void setCenter(Point center) {
 		this.center = center;
 	}
-
-	public Velocity getV() {
-		return v;
+	
+	public int getX() {
+		return this.center.getX();
 	}
-
-	public void setV(Velocity v) {
-		this.v = v;
+	
+	public void setX(int x) {
+		this.center.setX(x);
 	}
-
-	public double getRadius() {
+	
+	public int getY() {
+		return this.center.getY();
+	}
+	
+	public void setY(int y) {
+		this.center.setY(y);
+	}
+	
+	public int getVx() {
+		return this.v.getVx();
+	}
+	
+	public void setVx(int vx) {
+		this.v.setVx(vx);
+	}
+	
+	public int getVy() {
+		return this.v.getVy();
+	}
+	
+	public void setVy(int vy) {
+		this.v.setVy(vy);
+	}
+	
+	public int getRadius() {
 		return radius;
 	}
-
-	public void setRadius(double radius) {
+	
+	public void setRadius(int radius) {
 		this.radius = radius;
-	}
-
-	public Color getColor() {
-		return color;
-	}
-
-	public void setColor(Color color) {
-		this.color = color;
-	}
-
-	@Override
-	public String toString() {
-		return "Ball [center=" + center + ", v=" + v + ", radius=" + radius
-				+ ", color=" + color + "]";
 	}
 	
 	public void move(World world) {
-		
-		if(Math.abs(center.getPx() + v.getVx()) > (world.getWidth() / 2) - radius) {
-			v.setVx(-v.getVx());
+		if((this.getX() > world.getSize() - this.getRadius() * 2) || (this.getX() < 0)) {
+			this.setVx(-this.getVx());
 		}
 		
-		if(Math.abs(center.getPy() + v.getVy()) > (world.getWidth() / 2) - radius) {
-			v.setVy(-v.getVy());
+		if((this.getY() > world.getSize() - this.getRadius() * 2) || (this.getY() < 0)) {
+			this.setVy(-this.getVy());
 		}
 		
-		center.setPx(center.getPx() + v.getVx());
-		center.setPy(center.getPy() + v.getVy());
-		
+		this.setX(this.getX() + this.getVx());
+		this.setY(this.getY() + this.getVy());
 	}
 	
-	public void draw() {
+	public boolean hasCollided(Ball ball) {		
+		int dx = this.getX() - ball.getX();
+		int dy = this.getY() - ball.getY();
 		
-		StdDraw.setPenColor(getColor());
-		StdDraw.filledCircle(getCenter().getPx(), getCenter().getPy(), getRadius());
-		
-	}
-	
-	public boolean hasCollided(Ball b) {
-		
-		double dx = this.getCenter().getPx() - b.getCenter().getPx();
-		double dy = this.getCenter().getPy() - b.getCenter().getPy();
-		double distance = this.radius + b.radius;
-		
-		if (Math.pow(dx, 2) + Math.pow(dy, 2) <= Math.pow(distance, 2)) {
+		if (Math.pow(dx, 2) + Math.pow(dy, 2) <= Math.pow(radius*2, 2)) {
 			return true;
 		}
-		else {
-			return false;
-		}
-		
+		else return false;
 	}
-	
 }

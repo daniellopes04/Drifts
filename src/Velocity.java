@@ -1,33 +1,27 @@
 
 public class Velocity {
 
-	private double vx, vy;
+	private int vx, vy;
 
-	public Velocity(double vx, double vy) {
-		super();
+	public Velocity(int vx, int vy) {
 		this.vx = vx;
 		this.vy = vy;
 	}
-
-	public double getVx() {
+	
+	public int getVx() {
 		return vx;
 	}
 
-	public void setVx(double vx) {
+	public void setVx(int vx) {
 		this.vx = vx;
 	}
 
-	public double getVy() {
+	public int getVy() {
 		return vy;
 	}
 
-	public void setVy(double vy) {
+	public void setVy(int vy) {
 		this.vy = vy;
-	}
-
-	@Override
-	public String toString() {
-		return "Velocity [vx=" + vx + ", vy=" + vy + "]";
 	}
 	
 }

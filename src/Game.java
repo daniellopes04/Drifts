@@ -1,174 +1,77 @@
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.util.ArrayList;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
+import java.awt.Graphics;
+import java.util.Random;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
-import javax.swing.*;
-//import java.awt.Event;
+public class Game {
 
-public class Game implements MouseMotionListener {
-
-	private World world;
+	private World myWorld = new World(500);
+	private int x, y;
+	private Ball chief; 
 	private Ball[] greenList;
-	private Ball[] blueList;
-	private Ball[] magentaList;
-	private Ball chief;
-	private int width = 2;
-	private int height = 2;
-	private int quantGreens = 20;
-	private int quantBlues = 10;
-	private int quantMagentas = 40;
-	private Color background = StdDraw.GRAY;
-	private ArrayList<Ball> collidedList;
-	
-	JFrame frame = new JFrame();
-	JPanel telaJogo = new JPanel();
+	private int quantGreens = 5;
 	
 	public Game() {
-		world = new World(width, height, background);
+		chief = new Ball(myWorld.getSize() / 2 - 20, myWorld.getSize() / 2 - 20);
 		greenList = new Ball[quantGreens];
-		blueList = new Ball[quantBlues];
-		magentaList = new Ball[quantMagentas];
 		
-		//telaJogo.addMouseListener(chief);
-		telaJogo.addMouseMotionListener(this);
-		frame.getContentPane().add(BorderLayout.CENTER, telaJogo);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(500, 500);
-		frame.setVisible(true);
-		
-		collidedList = new ArrayList<Ball>();
-		
-		for (int i = 0; i < quantGreens; i++) {
-			greenList[i] = new Ball(
-								new Point(
-									Math.random(), 
-									0.95
-								), 
-								new Velocity(
-									-0.01 * Math.random(), 
-									-0.01 * Math.random()
-								), 
-								0.05,
-								StdDraw.GREEN
-							);
+		for(int i = 0; i < quantGreens; i++) {
+			Random random = new Random();
+			x = random.nextInt(myWorld.getSize() - 40);
+			y = random.nextInt(myWorld.getSize() - 40);
+			greenList[i] = new Ball(x, y);
 		}
-		
-		for (int i = 0; i < quantBlues; i++) {
-			blueList[i] = new Ball(
-								new Point(
-									2 * Math.random() - 1, 
-									Math.random()
-								), 
-								new Velocity(
-									-0.01 * Math.random(), 
-									0.01 * Math.random()
-								), 
-								0.05,
-								StdDraw.BLUE
-							);
-		}
-		
-		for (int i = 0; i < quantMagentas; i++) {
-			magentaList[i] = new Ball(
-								new Point(
-									2 * Math.random() - 1, 
-									Math.random()
-								), 
-								new Velocity(
-									-0.01 * Math.random(), 
-									0.01 * Math.random()
-								), 
-								0.05,
-								StdDraw.MAGENTA
-							);
-		}
-		
-		chief = new Ball(
-				new Point(
-					2 * Math.random() - 1, 
-					Math.random()
-				), 
-				new Velocity(
-					-0.01 * Math.random(), 
-					0.01 * Math.random()
-				), 
-				0.05, 
-				StdDraw.RED
-			);
 	}
 	
 	public void go() {
-		StdDraw.setScale(-world.getWidth() / 2, +world.getWidth() / 2);
-		boolean roda = true;
-		
-		while (roda == true) {
-			StdDraw.clear(world.getBackground());
-			
-			for (int i = 0; i < quantGreens; i++) {
-				greenList[i].move(world);
-				greenList[i].draw();
-			}
-			
-			for (int i = 0; i < quantBlues; i++) {
-				blueList[i].move(world);
-				blueList[i].draw();
-			}
-			
-			for (int i = 0; i < quantMagentas; i++) {
-				magentaList[i].move(world);
-				magentaList[i].draw();
-			}
-			
-			chief.move(world);
-			chief.draw();
-			
-			for (int i = 0; i < quantGreens; i++) {
-				if (chief.hasCollided(greenList[i])) {					
-					collidedList.add(greenList[i]);
-					greenList[i].setV(chief.getV());
-				}
-				else{
-					
-				}
-			}
-
-			for (int i = 0; i < quantBlues; i++) {
-				if (chief.hasCollided(blueList[i])) {					
-					collidedList.add(blueList[i]);
-					blueList[i].setV(chief.getV());
-				}
-			}
-			
-			/*for (int i = 0; i < quantMagentas; i++) {
-				if (chief.hasCollided(magentaList[i])) {					
-					roda = false;
-					System.out.println("Cabou");
-				}
-			} */
-			
-			StdDraw.show(10);
-		}
+		JFrame frame = new JFrame();
+	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    GamePanel drawPanel = new GamePanel();
+	    frame.getContentPane().add(drawPanel);
+	    frame.setSize(myWorld.getSize(), myWorld.getSize());
+	    frame.setVisible(true);
+	    
+	    for(int i = 0; i < 3000; i++) {
+	        for(int j = 0; j < quantGreens; j++) {
+	        	greenList[j].move(myWorld);
+	        	
+	        	if(chief.hasCollided(greenList[j])) {
+	        		try {
+	    	        	Thread.sleep(100);
+	    	        }
+	    	        catch(Exception ex) { 
+	    	        	System.out.println("Deu ruim...");
+	    	        }
+	        	}
+	        	
+	        	drawPanel.repaint();
+	        }
+	        
+	        try {
+	        	Thread.sleep(5);
+	        }
+	        catch(Exception ex) { 
+	        	System.out.println("Deu ruim...");
+	        }
+	    }
 	}
 	
-	public void mouseDragged(MouseEvent e) {}
-	
-	public void mouseMoved(MouseEvent me) {
-		int newX = me.getX();
-		int newY = me.getY();
-		Point newCenter = new Point(newX, newY);
+	public class GamePanel extends JPanel {
 		
-		if(newY > 2) {
-			newCenter.setPy(2);
-		}
+		public void paintComponent(Graphics g) {
+			g.setColor(Color.white);
+			g.fillRect(0, 0, this.getWidth(), this.getHeight());
+			
+			g.setColor(Color.red);
+			g.fillOval(chief.getX(), chief.getY(), chief.getRadius()*2, chief.getRadius()*2);
+			
+			for(int i = 0; i < quantGreens; i++) {
+				g.setColor(Color.green);
+				g.fillOval(greenList[i].getX(), greenList[i].getY(), greenList[i].getRadius()*2, greenList[i].getRadius()*2);
+			}
+	    }
 		
-		if(newX > 2) {
-			newCenter.setPx(2);
-		}
-		
-		chief.setCenter(newCenter);
 	}
 	
 }
