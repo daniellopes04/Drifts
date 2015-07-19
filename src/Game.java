@@ -39,7 +39,6 @@ public class Game {
 		blueList = new ArrayList<Ball>();
 		magentaList = new ArrayList<Ball>();
 		collidedGreenList = new ArrayList<Ball>();
-//		collidedBlueList = new ArrayList<Ball>();
 		ballsOutList = new ArrayList<Ball>();
 		x1 = chief.getX();
 		y1 = chief.getY();
@@ -48,16 +47,38 @@ public class Game {
 	public void go() {
 		JFrame frame = new JFrame();
 		JPanel pointsPanel = new JPanel();
-		JLabel pointsIndicator = new JLabel("Pontos: " + String.valueOf(points));
+		JLabel pointsIndicator = new JLabel();
+		JPanel instructionsPanel = new JPanel();
+		JLabel instructions = new JLabel("Clique com o mouse na bola vermelha e arraste para jogar.");
 		Font pointsFont = new Font("serif", Font.BOLD, 30);
 		GamePanel drawPanel = new GamePanel();
 		pointsIndicator.setFont(pointsFont);
 		pointsPanel.add(pointsIndicator);
+		instructionsPanel.add(instructions);
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    frame.getContentPane().add(BorderLayout.CENTER, drawPanel);
 	    frame.getContentPane().add(BorderLayout.NORTH, pointsPanel);
+	    frame.getContentPane().add(BorderLayout.SOUTH, instructionsPanel);
 	    frame.setSize(myWorld.getSize(), myWorld.getSize());
 	    frame.setVisible(true);
+	    
+	    try {
+			pointsIndicator.setText("O jogo começará em..");
+			Thread.sleep(1000);
+			pointsIndicator.setText("3");
+			Thread.sleep(1000);
+			pointsIndicator.setText("2");
+			Thread.sleep(1000);
+			pointsIndicator.setText("1");
+			Thread.sleep(1000);
+			pointsIndicator.setText("Comece!");
+			Thread.sleep(1000);
+			pointsIndicator.setText("Pontos: " + String.valueOf(points));
+			
+        }
+        catch(Exception ex) { 
+        	System.out.println("Algo de errado não está certo...");
+        }
 	    
 	    while(gameStatus == true) {
 	    	quantGreen = random.nextInt(2);
