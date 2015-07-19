@@ -2,10 +2,19 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 import java.util.Random;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class Game {
 
@@ -23,6 +32,8 @@ public class Game {
 	private ArrayList<Ball> collidedBlueList;
 	private ArrayList<Ball> ballsOutList;
 	private int points = 0;
+	private int x1, y1, x2, y2, x3, y3;
+	private Ellipse2D myChief;
 	Random random = new Random();
 	
 	public Game() {
@@ -33,30 +44,8 @@ public class Game {
 		collidedGreenList = new ArrayList<Ball>();
 		collidedBlueList = new ArrayList<Ball>();
 		ballsOutList = new ArrayList<Ball>();
-		
-//		for(int i = 0; i < quantGreen; i++) {
-//			Random random = new Random();
-//			x = random.nextInt(myWorld.getSize() - 40);
-//			y = random.nextInt(myWorld.getSize() - 40);
-//			Ball ball = new Ball(x, y);
-//			greenList.add(ball);
-//		}
-//		
-//		for(int i = 0; i < quantBlue; i++) {
-//			Random random = new Random();
-//			x = random.nextInt(myWorld.getSize() - 40);
-//			y = random.nextInt(myWorld.getSize() - 40);
-//			Ball ball = new Ball(x, y);
-//			blueList.add(ball);
-//		}		
-//		
-//		for(int i = 0; i < quantMagenta; i++)  {
-//			Random random = new Random();
-//			x = random.nextInt(myWorld.getSize() - 40);
-//			y = random.nextInt(myWorld.getSize() - 40);
-//			Ball ball = new Ball(x, y);
-//			magentaList.add(ball);
-//		}
+		x1 = chief.getX();
+		y1 = chief.getY();
 	}
 	
 	public void go() {
@@ -74,7 +63,6 @@ public class Game {
 	    frame.setVisible(true);
 	    
 	    while(gameStatus == true) {
-	    		
 	    	quantGreen = random.nextInt(2);
 	    	quantBlue = random.nextInt(2);
 	    	quantMagenta = random.nextInt(2);
@@ -105,7 +93,7 @@ public class Game {
 	    	for(Ball ball:greenList) {
 	        	ball.move(myWorld);
 	        	
-	        	if(chief.hasCollided(ball) && ball.getVx() != 0) {
+	        	if(ball.hasCollided(chief) && ball.getVx() != 0) {
 	        		ball.setVx(0);
 	        		ball.setVy(0);
 	        		collidedGreenList.add(ball);
@@ -164,10 +152,9 @@ public class Game {
 	    	for(Ball ball:magentaList) {
 	        	ball.move(myWorld);
 	        	
-	        	if(chief.hasCollided(ball)) {
+	        	if(ball.hasCollided(chief)) {
 	        		try {
-//	    	        	Thread.sleep(50);
-//	        			gameStatus = false;
+	        			gameStatus = false;
 	    	        }
 	    	        catch(Exception ex) { 
 	    	        	System.out.println("Algo de errado não está certo...");
@@ -224,18 +211,28 @@ public class Game {
 	}
 	
 	public class GamePanel extends JPanel {
+
+		public GamePanel(){
+			addMouseListener(new myMouseListener());
+			addMouseMotionListener(new myMouseMotionListener());
+		}
 		
 		public void paintComponent(Graphics g) {
-			g.setColor(Color.WHITE);
-			g.fillRect(0, 0, this.getWidth(), this.getHeight());
 			
-			g.setColor(Color.RED);
-			g.fillOval(chief.getX(), chief.getY(), chief.getRadius()*2, chief.getRadius()*2);
-
+			Graphics2D g2d = (Graphics2D) g;
+			myChief = new Ellipse2D.Float(x1, y1, chief.getRadius()*2, chief.getRadius()*2);
+			
+			g2d.setColor(Color.WHITE);
+			g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
+			
+			g2d.setColor(Color.RED);
+//			g2d.fillOval(chief.getX(), chief.getY(), chief.getRadius()*2, chief.getRadius()*2);
+			g2d.fill(myChief);
+			
 			try {
 				for(Ball ball:greenList) {
-					g.setColor(Color.GREEN);
-					g.fillOval(ball.getX(), ball.getY(), ball.getRadius()*2, ball.getRadius()*2);
+					g2d.setColor(Color.GREEN);
+					g2d.fillOval(ball.getX(), ball.getY(), ball.getRadius()*2, ball.getRadius()*2);
 				}
 			}
 			catch(Exception ex) {
@@ -244,8 +241,8 @@ public class Game {
 			
 			try {
 				for(Ball ball:blueList) {
-					g.setColor(Color.BLUE);
-					g.fillOval(ball.getX(), ball.getY(), ball.getRadius()*2, ball.getRadius()*2);
+					g2d.setColor(Color.BLUE);
+					g2d.fillOval(ball.getX(), ball.getY(), ball.getRadius()*2, ball.getRadius()*2);
 				}
 			}
 			catch(Exception ex) {
@@ -254,16 +251,57 @@ public class Game {
 			
 			try {
 				for(Ball ball:magentaList) {
-					g.setColor(Color.MAGENTA);
-					g.fillOval(ball.getX(), ball.getY(), ball.getRadius()*2, ball.getRadius()*2);
+					g2d.setColor(Color.MAGENTA);
+					g2d.fillOval(ball.getX(), ball.getY(), ball.getRadius()*2, ball.getRadius()*2);
 				}
 			}	
 			catch(Exception ex) {
 
 			}
-			
 	    }
 		
+		class myMouseListener extends MouseAdapter {
+			public void mousePressed(MouseEvent e) {
+				x2 = e.getX();
+				y2 = e.getY();
+//				System.out.println(x2+" "+y2);
+			}
+		}
+		
+		class myMouseMotionListener extends MouseMotionAdapter {
+			public void mouseDragged(MouseEvent e) {
+				if(gameStatus) {
+					if(myChief.getBounds2D().contains(x2, y2)) {
+						x3 = e.getX();
+						y3 = e.getY();
+						
+						x1 += x3 - x2;
+						y1 += y3 - y2;
+						
+						chief.setX(x1);
+						chief.setY(y1);
+						
+						for(Ball ball:greenList) {
+				        	if(chief.hasCollided(ball) && ball.getVx() != 0) {
+				        		ball.setVx(0);
+				        		ball.setVy(0);
+				        		collidedGreenList.add(ball);
+				        	}
+				        }
+						
+						for(Ball ball:collidedGreenList) {
+							ball.setX(ball.getX() + x3 - x2);
+							ball.setY(ball.getY() + y3 - y2);
+						}
+						
+						x2 = x3;
+						y2 = y3;
+					}
+
+					repaint();
+				}
+			}
+		}
 	}
 	
 }
