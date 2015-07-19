@@ -3,15 +3,12 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 import java.util.Random;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -29,7 +26,7 @@ public class Game {
 	private ArrayList<Ball> magentaList;
 	private int quantMagenta;
 	private ArrayList<Ball> collidedGreenList;
-	private ArrayList<Ball> collidedBlueList;
+	private Ball collidedBlue;
 	private ArrayList<Ball> ballsOutList;
 	private int points = 0;
 	private int x1, y1, x2, y2, x3, y3;
@@ -42,7 +39,7 @@ public class Game {
 		blueList = new ArrayList<Ball>();
 		magentaList = new ArrayList<Ball>();
 		collidedGreenList = new ArrayList<Ball>();
-		collidedBlueList = new ArrayList<Ball>();
+//		collidedBlueList = new ArrayList<Ball>();
 		ballsOutList = new ArrayList<Ball>();
 		x1 = chief.getX();
 		y1 = chief.getY();
@@ -51,7 +48,7 @@ public class Game {
 	public void go() {
 		JFrame frame = new JFrame();
 		JPanel pointsPanel = new JPanel();
-		JLabel pointsIndicator = new JLabel(String.valueOf(points));
+		JLabel pointsIndicator = new JLabel("Pontos: " + String.valueOf(points));
 		Font pointsFont = new Font("serif", Font.BOLD, 30);
 		GamePanel drawPanel = new GamePanel();
 		pointsIndicator.setFont(pointsFont);
@@ -67,7 +64,7 @@ public class Game {
 	    	quantBlue = random.nextInt(2);
 	    	quantMagenta = random.nextInt(2);
 	    	
-	    	if(greenList.size() < 5 && blueList.size() < 5 && magentaList.size() < 5) {
+	    	if(greenList.size() < 5 && blueList.size() < 3 && magentaList.size() < 7) {
 		    	for(int i = 0; i < quantGreen; i++) {
 					x = random.nextInt(myWorld.getSize() - 40);
 					y = 0;
@@ -127,27 +124,24 @@ public class Game {
 	        				points += 51;
 	        			}
 	        			
-	        			pointsIndicator.setText(String.valueOf(points));
-	        			collidedBlueList.add(ball);
+	        			pointsIndicator.setText("Pontos: " + String.valueOf(points));
+	        			collidedBlue = ball;
 	        			break;
 	        		}
 	        	}
 	        }
 	    	
-	    	for(Ball collidedBlueBall:collidedBlueList) {
-        		if(blueList.contains(collidedBlueBall)) {
-        			blueList.remove(collidedBlueBall);
-        			
-        			for(Ball collidedGreenBall:collidedGreenList) {
-                		if(greenList.contains(collidedGreenBall)) {
-                			greenList.remove(collidedGreenBall);
-                		}
-                	}
-        			
-        			collidedGreenList.clear();
-        		}
-        	}
-	    	collidedBlueList.clear();
+	    	if(collidedBlue != null) {
+	    		for(Ball collidedGreenBall:collidedGreenList) {
+	        		if(greenList.contains(collidedGreenBall)) {
+	        			greenList.remove(collidedGreenBall);
+	        		}
+	        	}
+	    		collidedGreenList.clear();
+		    	blueList.remove(collidedBlue);
+		    	collidedBlue = null;
+	    	}
+	    	
 	    	
 	    	for(Ball ball:magentaList) {
 	        	ball.move(myWorld);
@@ -155,6 +149,7 @@ public class Game {
 	        	if(ball.hasCollided(chief)) {
 	        		try {
 	        			gameStatus = false;
+	        			pointsIndicator.setText("Você perdeu... =(");
 	    	        }
 	    	        catch(Exception ex) { 
 	    	        	System.out.println("Algo de errado não está certo...");
@@ -163,8 +158,9 @@ public class Game {
 	        }
 	    	
 	    	for(Ball ball:greenList) {
-	    		if(ball.getX() > myWorld.getSize() || ball.getY() > myWorld.getSize()
-	    				|| ball.getX() < -40 || ball.getY() < -40) {
+	    		if((ball.getX() > myWorld.getSize() || ball.getY() > myWorld.getSize() 
+	    				|| ball.getX() < -40 || ball.getY() < -40) 
+	    				&& collidedGreenList.contains(ball) == false) {
 	    			ballsOutList.add(ball);
 	    		}
 	    	}
@@ -218,7 +214,6 @@ public class Game {
 		}
 		
 		public void paintComponent(Graphics g) {
-			
 			Graphics2D g2d = (Graphics2D) g;
 			myChief = new Ellipse2D.Float(x1, y1, chief.getRadius()*2, chief.getRadius()*2);
 			
@@ -226,7 +221,6 @@ public class Game {
 			g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
 			
 			g2d.setColor(Color.RED);
-//			g2d.fillOval(chief.getX(), chief.getY(), chief.getRadius()*2, chief.getRadius()*2);
 			g2d.fill(myChief);
 			
 			try {
@@ -264,7 +258,6 @@ public class Game {
 			public void mousePressed(MouseEvent e) {
 				x2 = e.getX();
 				y2 = e.getY();
-//				System.out.println(x2+" "+y2);
 			}
 		}
 		
