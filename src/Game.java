@@ -224,7 +224,6 @@ public class Game {
 	        	System.out.println("Algo de errado não está certo...");
 	        }
 	    }
-	    
 	}
 	
 	public class GamePanel extends JPanel {
@@ -275,14 +274,14 @@ public class Game {
 			}
 	    }
 		
-		class myMouseListener extends MouseAdapter {
+		public class myMouseListener extends MouseAdapter {
 			public void mousePressed(MouseEvent e) {
 				x2 = e.getX();
 				y2 = e.getY();
 			}
 		}
 		
-		class myMouseMotionListener extends MouseMotionAdapter {
+		public class myMouseMotionListener extends MouseMotionAdapter {
 			public void mouseDragged(MouseEvent e) {
 				if(gameStatus) {
 					if(myChief.getBounds2D().contains(x2, y2)) {
@@ -317,5 +316,4 @@ public class Game {
 			}
 		}
 	}
-	
 }
