@@ -2,7 +2,7 @@
 
 Trabalho de desenvolvimento Java para a disciplina de Computação II do curso de Ciência da Computação da Universidade Federal do Rio de Janeiro (UFRJ).
 
-##Descrição do jogo
+## Descrição do jogo
 
 O jogo é conhecido como Drifts e uma versão que pode ser jogada na Internet pode ser
 encontrada em http://www.bigfishgames.com/online-games/4095/drifts/index.html. O usuário comanda com
